@@ -1,4 +1,5 @@
 #include "PID.h"
+#include <cmath>
 
 using namespace std;
 
@@ -69,9 +70,7 @@ void PID::Twiddle(double tol = 0.0001){
   double best_cte = p_error;
   double err;
 
-  iter = 0;
-
-  while(dp[0] + dp[1] + dp[2] > tol){
+  while(abs(dp[0]) + abs(dp[1]) + abs(dp[2]) > tol){
     for (int i=0; i<p.size(); i++){
 
       p[i] += dp[i];
