@@ -56,6 +56,7 @@ void PID::UpdateError(double cte) {
   // i_error continue to sum up all ctes
   i_error += cte;
 
+  // iterate to the next stage
   iter += 1;
 }
 
@@ -70,6 +71,7 @@ void PID::Twiddle(double tol = 0.0001){
   double best_cte = p_error;
   double err;
 
+  // while still below tol
   while(abs(dp[0]) + abs(dp[1]) + abs(dp[2]) > tol){
     for (int i=0; i<p.size(); i++){
 
