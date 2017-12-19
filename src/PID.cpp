@@ -1,5 +1,6 @@
 #include "PID.h"
 #include <cmath>
+#include <iostream>
 
 using namespace std;
 
@@ -60,14 +61,14 @@ void PID::UpdateError(double cte) {
   iter += 1;
 }
 
-double PID::TotalError() {
+double PID::TotalError(double p_coeff, double i_coeff, double d_coeff) {
   // Returns the total error/steer_value by combining all PID controller with their errors
-  return -Kp * p_error - Ki * i_error - Kd * d_error;
+  return -p_coeff * p_error - i_coeff * i_error - d_coeff * d_error;
 }
 
-void PID::Twiddle(double tol = 0.0001){
+void PID::Twiddle(double tol){
 
-  double best_err = TotalError();
+  double best_err = abs(TotalError(Kp, Ki, Kd));
   double best_cte = p_error;
   double err;
 
@@ -76,7 +77,7 @@ void PID::Twiddle(double tol = 0.0001){
     for (int i=0; i<p.size(); i++){
 
       p[i] += dp[i];
-      err = TotalError();
+      err = abs(TotalError(p[0], p[1], p[2]));
 
       if (err < best_err){
         best_err = err;
@@ -84,7 +85,7 @@ void PID::Twiddle(double tol = 0.0001){
       }
       else{
         p[i] -= 2 * dp[i];
-        err = TotalError();
+        err = abs(TotalError(p[0], p[1], p[2]));
 
         if (err < best_err){
           best_err = err;
@@ -96,8 +97,23 @@ void PID::Twiddle(double tol = 0.0001){
         }
       }
     }
-
-    iter += 1;
-
   }
+  for (int j=0; j < p.size(); j++){
+    if (p[j] < 0.0){
+      p[j] = abs(p[j]);
+    }
+  }
+
+  iter += 1;
+
+  // Change coefficients of p values back to PID, after loop.
+  Kp = p[0];
+  Ki = p[1];
+  Kd = p[2];
+
+  // Reset dp values for another iteration
+  dp[0] = Kp * 0.1;
+  dp[1] = Ki * 0.1;
+  dp[2] = Kd * 0.1;
+
 }

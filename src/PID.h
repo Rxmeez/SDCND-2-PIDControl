@@ -48,8 +48,7 @@ public:
   /*
   * Calculate the total PID error.
   */
-  double TotalError();
-
+  double TotalError(double p_coeff, double i_coeff, double d_coeff);
   /*
   * Fine tunes the PID coefficients to minimise the total error
   */
