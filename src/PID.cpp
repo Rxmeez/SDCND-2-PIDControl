@@ -33,9 +33,9 @@ void PID::Init(double Kp_, double Ki_, double Kd_) {
   iter = 0;
 
   //Initialize Twiddle dp values
-  dp[0] = 1.0;
-  dp[1] = 1.0;
-  dp[2] = 1.0;
+  dp[0] = Kp * 0.1;
+  dp[1] = Ki * 0.1;
+  dp[2] = Kd * 0.1;
 
   // Twiddle PID Coefficient that will be fine tuned
   p[0] = Kp;

@@ -36,7 +36,7 @@ int main()
   // Initialize the pid variable, where the input can be tuned
   PID pid;
 
-  pid.Init(0.2, 0.004, 3.0);
+  pid.Init(0.18, 0.0038, 3.1);
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
@@ -62,31 +62,29 @@ int main()
           */
           // Update error values with cte
           pid.UpdateError(cte);
-          std::cout << pid.iter << std::endl;
-          if ((pid.iter > 0) && (pid.iter < 50)) {
-             pid.Twiddle(0.00001);
+
+          // Implementation of Twiddle to get values for Kp, Ki, Kd.
+          /* std::cout << pid.iter << std::endl;
+          if ((pid.iter > 50) && (pid.iter < 100)) {
+             pid.Twiddle(0.000001);
              std::cout << "iter: " << pid.iter << std::endl
              << "Kp: " << pid.Kp << std::endl
              << "Ki: " << pid.Ki << std::endl
              << "Kd: " << pid.Kd << std::endl;
           }
+          */
 
           // Calculating the steering values using PID controller Coefficients * errors.
           steer_value = pid.TotalError(pid.Kp, pid.Ki, pid.Kd);
 
-          std::cout << "iter: " << pid.iter << std::endl
-          << "Kp: " << pid.Kp << std::endl
-          << "Ki: " << pid.Ki << std::endl
-          << "Kd: " << pid.Kd << std::endl;
-
           // DEBUG
-          //std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;
+          std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;
 
           json msgJson;
           msgJson["steering_angle"] = steer_value;
-          msgJson["throttle"] = 0.3;
+          msgJson["throttle"] = (1 - std::abs(steer_value)) * 0.3;
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
-          //std::cout << msg << std::endl;
+          std::cout << msg << std::endl;
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
         }
       } else {
