@@ -2,6 +2,26 @@
 Self-Driving Car Engineer Nanodegree Program
 
 ---
+## Introduction
+The project was created with the Udacity Starter Code. The main goal of the project is to implement PID controller in C++ to steer the car around the track in the simulator.
+
+My implmentation of PID controller driving the car around the track can be found on [youtube](https://www.youtube.com/watch?v=LrfQRFhIGX0&feature=youtu.be)
+
+## PID controller
+A PID controller stands for Proportional, Integral, Derivative controller. This is a control loop feedback system that can be applied to different control systems, one of them being a car.
+
+The controller has an input of error which the controller want to minimise. In my case it was the cross-track error (CTE). CTE = desired state - measured state
+
+The proportional component, causes the car to steer the car towards the center of the road. What use to happen was the car always overshoot the center of the road causing it to swirl left and right. This was because as soon as it recognised it was at the center of the road, the speed and the angle of the car havent adjusted in time for it to correct smoothly.
+The differential compenent, causes the car to prevent that overshoot caused by the proportional controller, so tuning the differential paramenter causes the car to smoothly drive towards the center.
+The integral compement, takes into account the CTE over the past time and trying to reduce the systematic bias.
+
+## How it was tuned
+I initially implemented the automate parameter optimization that was taught in the class, Twiddle. With the initial values choosen at random. What I saw was the Twiddle was changing the parameters but it didnt actually improve the driving of the car, because it was still spiral off the road. But this didnt provide me with roughly what values were working.
+So I decided to manually hypertune the parameters which was alot more tedious, but did result in a successful drive around the track. I also tuned the throttle of the car where the car would throttle less around the corners which makes sense so the car doesnt drive off track.
+
+
+---
 
 ## Dependencies
 
@@ -19,7 +39,7 @@ Self-Driving Car Engineer Nanodegree Program
   * Run either `./install-mac.sh` or `./install-ubuntu.sh`.
   * If you install from source, checkout to commit `e94b6e1`, i.e.
     ```
-    git clone https://github.com/uWebSockets/uWebSockets 
+    git clone https://github.com/uWebSockets/uWebSockets
     cd uWebSockets
     git checkout e94b6e1
     ```
@@ -33,7 +53,7 @@ There's an experimental patch for windows in this [PR](https://github.com/udacit
 1. Clone this repo.
 2. Make a build directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
-4. Run it: `./pid`. 
+4. Run it: `./pid`.
 
 Tips for setting up your environment can be found [here](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/0949fca6-b379-42af-a919-ee50aa304e6a/lessons/f758c44c-5e40-4e01-93b5-1a82aa4e044f/concepts/23d376c7-0195-4276-bdf0-e02f1f3c665d)
 
@@ -95,4 +115,3 @@ still be compilable with cmake and make./
 
 ## How to write a README
 A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
-
