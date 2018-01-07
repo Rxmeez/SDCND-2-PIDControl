@@ -20,7 +20,6 @@ The integral compement, takes into account the CTE over the past time and trying
 I initially implemented the automate parameter optimization that was taught in the class, Twiddle. With the initial values choosen at random. What I saw was the Twiddle was changing the parameters but it didnt actually improve the driving of the car, because it was still spiral off the road. But this didnt provide me with roughly what values were working.
 So I decided to manually hypertune the parameters which was alot more tedious, but did result in a successful drive around the track. I also tuned the throttle of the car where the car would throttle less around the corners which makes sense so the car doesnt drive off track.
 
-
 ---
 
 ## Dependencies
